@@ -1,0 +1,23 @@
+name: Test
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: craft artifact
+        run: |
+          mkdir -p /tmp/content
+          echo "${{ github.event.number }}" > /tmp/content/pr_number.txt
+          echo "hello from a forked PR" > /tmp/content/report.txt
+          printf 'injected' > '/tmp/content/x$(id).txt'
+          ls -1 /tmp/content
+      - uses: actions/upload-artifact@v4
+        with:
+          name: content
+          path: /tmp/content
